@@ -1,3 +1,6 @@
+//#include <stdio.h> // TODO: debugging
+#include <stddef.h>
+extern void* shm_morecore (ptrdiff_t);
 /*
   This is a version (aka dlmalloc) of malloc/free/realloc written by
   Doug Lea and released to the public domain, as explained at
@@ -1487,7 +1490,6 @@ DLMALLOC_EXPORT int mspace_mallopt(int, int);
 extern void*     sbrk(ptrdiff_t);
 #endif /* FreeBSD etc */
 #endif /* LACKS_UNISTD_H */
-
 /* Declarations for locking */
 #if USE_LOCKS
 #ifndef WIN32
@@ -6278,4 +6280,3 @@ History:
          structure of old version,  but most details differ.)
 
 */
-

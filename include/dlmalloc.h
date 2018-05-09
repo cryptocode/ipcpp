@@ -1,4 +1,9 @@
 /*
+  Adoption of dlmalloc originally written by Doug Lea for
+  the Nano project's shared memory allocator.
+*/
+
+/*
   Default header file for malloc-2.8.x, written by Doug Lea
   and released to the public domain, as explained at
   http://creativecommons.org/publicdomain/zero/1.0/ 
