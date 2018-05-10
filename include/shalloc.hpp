@@ -1,5 +1,5 @@
 #pragma once
-#include "dlmalloc.h"
+#include "ipcmalloc.h"
 #include "murmurhash.hpp"
 #include <cstddef>
 #include <cstdlib>
@@ -225,7 +225,7 @@ template <typename K, typename V>
 using umap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>, std::allocator<std::pair<const K, V>>>;
 using shm_string = std::basic_string<char, std::char_traits<char>, nalloc<char>>;
 
-// TODO: new w/perfect forwards + delete, or template<typename T> nanocate(...)
+// TODO: new w/perfect forwards + delete, or template<typename T> ipcpp(...)
 
 } // ns
 

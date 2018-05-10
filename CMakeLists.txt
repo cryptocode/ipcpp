@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 2.8.2)
-project (nanocate C CXX)
+project (ipcpp C CXX)
 
 set(CMAKE_BUILD_TYPE Debug)
 #set(CMAKE_BUILD_TYPE RelWithDebInfo)
@@ -42,16 +42,16 @@ if (CMAKE_VERSION VERSION_LESS 2.8.11)
 endif()
 
 #---------------------------------#
-# Nanocate
+# ipcpp
 #---------------------------------#
 
 set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
 set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_STATIC_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
 
-# -- nanocate configuration
-add_definitions (-DNANOCATE_DEBUG=1)
+# -- ipcpp configuration
+add_definitions (-DIPCPP_DEBUG=1)
 
-# -- dlmalloc configuration
+# -- ipcmalloc configuration
 add_definitions (-DHAVE_MORECORE=1)
 add_definitions (-DMORECORE=shm_morecore)
 add_definitions (-DMORECORE_CONTIGUOUS=1)
@@ -63,18 +63,18 @@ add_definitions (-DUSE_LOCKS=0)
 
 # Platform bits
 if ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
-  add_definitions (-DNANOCATE_IS_64BIT=0)
+  add_definitions (-DIPCPP_IS_64BIT=0)
   message (STATUS "32 bit system")
 else ()
-  add_definitions (-DNANOCATE_IS_64BIT=1)
+  add_definitions (-DIPCPP_IS_64BIT=1)
   message (STATUS "64 bit system")
 endif ()
 
 # Platform files
 if (UNIX)
-  set(NANOCATE_PLATFORM src/posix/shmem.cpp)
+  set(IPCPP_PLATFORM src/posix/platform.cpp)
 else ()
-  set(NANOCATE_PLATFORM src/win/shmem.cpp)
+  set(IPCPP_PLATFORM src/win/platform.cpp)
 endif (UNIX)
 
 # Posix linking
@@ -83,8 +83,13 @@ if (UNIX AND NOT APPLE)
 endif ()
 
 include_directories("${PROJECT_BINARY_DIR}/include")
-add_library(nanocate STATIC ${NANOCATE_PLATFORM} include/dlmalloc.h src/dlmalloc.c src/morecore.cpp include/murmurhash.hpp include/shalloc.hpp src/shalloc.cpp)
+add_library(ipcpp STATIC ${IPCPP_PLATFORM} include/posix.hpp include/ipcmalloc.h src/ipcmalloc.c src/morecore.cpp include/murmurhash.hpp include/shalloc.hpp)
 
-add_executable(tests test.cpp)
-target_link_libraries(tests nanocate gtest_main ${LIB_RT})
+add_executable(test-suite test/test.cpp)
+target_link_libraries(test-suite ipcpp gtest_main ${LIB_RT})
 
+add_executable(test-producer test/producer.cpp)
+target_link_libraries(test-producer ipcpp ${LIB_RT})
+
+add_executable(test-consumer test/consumer.cpp)
+target_link_libraries(test-consumer ipcpp ${LIB_RT})

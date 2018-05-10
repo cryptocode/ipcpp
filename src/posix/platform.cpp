@@ -1,4 +1,4 @@
-#include "shmem.hpp"
+#include "platform.hpp"
 #include <fcntl.h>
 #include <iostream>
 #include <sys/mman.h>
@@ -6,7 +6,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-void * nanocate_allocate (const char * name, size_t size)
+void * ipcpp_allocate (const char * name, size_t size)
 {
 	// Unlinking before shm_open is required on macOS to get ftruncate
 	// working consistently (??? the other process)
@@ -32,7 +32,7 @@ void * nanocate_allocate (const char * name, size_t size)
 	return ptr;
 }
 
-int nanocate_destroy (const char * name)
+int ipcpp_destroy (const char * name)
 {
 	return shm_unlink (name);
 }

@@ -1,6 +1,6 @@
 #include "shalloc.hpp"
 #include "gtest/gtest.h"
-#include <dlmalloc.h>
+#include "ipcmalloc.h"
 #include <iostream>
 
 #include <map>
