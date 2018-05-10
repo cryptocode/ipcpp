@@ -135,8 +135,8 @@ public:
 	typedef typename C::difference_type difference_type;
 
 template <typename T,
-typename PolicyT = heap<T>,
-typename TraitsT = object_traits<T>>
+    typename PolicyT = heap<T>,
+    typename TraitsT = object_traits<T>>
 class allocator : public PolicyT,
                   public TraitsT
 {
@@ -151,9 +151,9 @@ public:
 	struct rebind
 	{
 		typedef allocator<U,
-		typename Policy::template rebind<U>::other,
-		typename Traits::template rebind<U>::other>
-		other;
+		    typename Policy::template rebind<U>::other,
+		    typename Traits::template rebind<U>::other>
+		    other;
 	};
 
 	// Constructor
@@ -163,67 +163,67 @@ public:
 
 	// Copy Constructor
 	template <typename U,
-	typename PolicyU,
-	typename TraitsU>
+	    typename PolicyU,
+	    typename TraitsU>
 	allocator (allocator<U,
-	PolicyU,
-	TraitsU> const & other) :
+	    PolicyU,
+	    TraitsU> const & other) :
 	Policy (other),
-	Traits (other)
+	    Traits (other)
 	{
 	}
 };
 
 // Two allocators are not equal unless a specialization says so
 template <typename T, typename PolicyT, typename TraitsT,
-typename U, typename PolicyU, typename TraitsU>
+    typename U, typename PolicyU, typename TraitsU>
 bool operator== (allocator<T, PolicyT, TraitsT> const & left,
-allocator<U, PolicyU, TraitsU> const & right)
+    allocator<U, PolicyU, TraitsU> const & right)
 {
 	return false;
 }
 
 // Also implement inequality
 template <typename T, typename PolicyT, typename TraitsT,
-typename U, typename PolicyU, typename TraitsU>
+    typename U, typename PolicyU, typename TraitsU>
 bool operator!= (allocator<T, PolicyT, TraitsT> const & left,
-allocator<U, PolicyU, TraitsU> const & right)
+    allocator<U, PolicyU, TraitsU> const & right)
 {
 	return !(left == right);
 }
 
 // Comparing an allocator to anything else should not show equality
 template <typename T, typename PolicyT, typename TraitsT,
-typename OtherAllocator>
+    typename OtherAllocator>
 bool operator== (allocator<T, PolicyT, TraitsT> const & left,
-OtherAllocator const & right)
+    OtherAllocator const & right)
 {
 	return false;
 }
 
 // Also implement inequality
 template <typename T, typename PolicyT, typename TraitsT,
-typename OtherAllocator>
+    typename OtherAllocator>
 bool operator!= (allocator<T, PolicyT, TraitsT> const & left,
-OtherAllocator const & right)
+    OtherAllocator const & right)
 {
 	return !(left == right);
 }
 
 // Specialize for the heap policy
 template <typename T, typename TraitsT,
-typename U, typename TraitsU>
+    typename U, typename TraitsU>
 bool operator== (allocator<T, heap<T>, TraitsT> const & left,
-allocator<U, heap<U>, TraitsU> const & right)
+    allocator<U, heap<U>, TraitsU> const & right)
 {
 	return true;
 }
 
 // Also implement inequality
 template <typename T, typename TraitsT,
-typename U, typename TraitsU>
+    typename U, typename TraitsU>
 bool operator!= (allocator<T, heap<T>, TraitsT> const & left,
-allocator<U, heap<U>, TraitsU> const & right)
+    allocator<U, heap<U>, TraitsU> const & right)
 {
 	return !(left == right);
 }

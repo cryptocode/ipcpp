@@ -18,7 +18,7 @@ BreakConstructorInitializersBeforeComma: true
 BreakConstructorInitializers: AfterColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 ConstructorInitializerIndentWidth: 0
-ContinuationIndentWidth: 0
+ContinuationIndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false
 IndentCaseLabels: true
 BraceWrapping:
