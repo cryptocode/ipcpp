@@ -6,7 +6,7 @@ An STL compliant allocator is provided, allowing strings, vectors, maps and sets
 
 ## ipcmalloc
 
-srmalloc is a heap allocator based on dlmalloc. The changes are as follows:
+ipcmalloc is a heap allocator based on dlmalloc. The changes are as follows:
 
 * It supports multiple `sbrk` callbacks. This is important to allow malloc'ing from different shared memory segments.
 * It removes unnecessary functions.
