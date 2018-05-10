@@ -57,16 +57,13 @@ TEST (Map, MapOfStrings)
 	//using strmap = std::unordered_map<shm_string,shm_string, std::hash<shm_string>, std::equal_to<shm_string>, strmap_alloc>;
 
 	auto map = new (dlmalloc (sizeof (umap<shm_string, shm_string>))) umap<shm_string, shm_string> ();
-	//auto key = new (dlmalloc(sizeof(shm_string))) shm_string("hi");
-	//std::cout << "KEY:" << key->c_str() << std::endl;
-	//auto value = new (dlmalloc(sizeof(shm_string))) shm_string("value");
-	/*auto & mapref = *map;
+	auto & mapref = *map;
 	mapref["hi"] = "og hå";
 	mapref["test"] = shm_string ("og hå");
 	for (auto & entry : mapref)
 	{
 		std::cout << entry.first << " = " << entry.second << std::endl;
-	}*/
+	}
 	//	map->insert(std::make_pair(*key, *value));
 
 	//shm_string key("demo");
