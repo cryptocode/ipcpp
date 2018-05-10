@@ -60,17 +60,20 @@ TEST (Map, MapOfStrings)
 	//auto key = new (dlmalloc(sizeof(shm_string))) shm_string("hi");
 	//std::cout << "KEY:" << key->c_str() << std::endl;
 	//auto value = new (dlmalloc(sizeof(shm_string))) shm_string("value");
-	auto & mapref = *map;
+	/*auto & mapref = *map;
 	mapref["hi"] = "og hå";
 	mapref["test"] = shm_string ("og hå");
 	for (auto & entry : mapref)
 	{
 		std::cout << entry.first << " = " << entry.second << std::endl;
-	}
+	}*/
 	//	map->insert(std::make_pair(*key, *value));
 
 	//shm_string key("demo");
 	//(*map)[key] = shm_string("value");
+
+	map->~umap<shm_string,shm_string>();
+	dlfree(map);
 }
 
 TEST (Map, MapOfInts)
@@ -83,6 +86,9 @@ TEST (Map, MapOfInts)
 
 	//shm_string key("demo");
 	//(*map)[key] = shm_string("value");
+
+	map->~umap<int,int>();
+	dlfree (map);
 }
 
 TEST (C, DISABLED_Plain)

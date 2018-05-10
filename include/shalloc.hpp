@@ -135,8 +135,8 @@ public:
 	typedef typename C::difference_type difference_type;
 
 template <typename T,
-typename PolicyT = heap<T>,
-typename TraitsT = object_traits<T>>
+    typename PolicyT = heap<T>,
+    typename TraitsT = object_traits<T>>
 class allocator : public PolicyT,
                   public TraitsT
 {
@@ -151,9 +151,9 @@ public:
 	struct rebind
 	{
 		typedef allocator<U,
-		typename Policy::template rebind<U>::other,
-		typename Traits::template rebind<U>::other>
-		other;
+		    typename Policy::template rebind<U>::other,
+		    typename Traits::template rebind<U>::other>
+		    other;
 	};
 
 	// Constructor
@@ -163,67 +163,67 @@ public:
 
 	// Copy Constructor
 	template <typename U,
-	typename PolicyU,
-	typename TraitsU>
+	    typename PolicyU,
+	    typename TraitsU>
 	allocator (allocator<U,
-	PolicyU,
-	TraitsU> const & other) :
+	    PolicyU,
+	    TraitsU> const & other) :
 	Policy (other),
-	Traits (other)
+	    Traits (other)
 	{
 	}
 };
 
 // Two allocators are not equal unless a specialization says so
 template <typename T, typename PolicyT, typename TraitsT,
-typename U, typename PolicyU, typename TraitsU>
+    typename U, typename PolicyU, typename TraitsU>
 bool operator== (allocator<T, PolicyT, TraitsT> const & left,
-allocator<U, PolicyU, TraitsU> const & right)
+    allocator<U, PolicyU, TraitsU> const & right)
 {
 	return false;
 }
 
 // Also implement inequality
 template <typename T, typename PolicyT, typename TraitsT,
-typename U, typename PolicyU, typename TraitsU>
+    typename U, typename PolicyU, typename TraitsU>
 bool operator!= (allocator<T, PolicyT, TraitsT> const & left,
-allocator<U, PolicyU, TraitsU> const & right)
+    allocator<U, PolicyU, TraitsU> const & right)
 {
 	return !(left == right);
 }
 
 // Comparing an allocator to anything else should not show equality
 template <typename T, typename PolicyT, typename TraitsT,
-typename OtherAllocator>
+    typename OtherAllocator>
 bool operator== (allocator<T, PolicyT, TraitsT> const & left,
-OtherAllocator const & right)
+    OtherAllocator const & right)
 {
 	return false;
 }
 
 // Also implement inequality
 template <typename T, typename PolicyT, typename TraitsT,
-typename OtherAllocator>
+    typename OtherAllocator>
 bool operator!= (allocator<T, PolicyT, TraitsT> const & left,
-OtherAllocator const & right)
+    OtherAllocator const & right)
 {
 	return !(left == right);
 }
 
 // Specialize for the heap policy
 template <typename T, typename TraitsT,
-typename U, typename TraitsU>
+    typename U, typename TraitsU>
 bool operator== (allocator<T, heap<T>, TraitsT> const & left,
-allocator<U, heap<U>, TraitsU> const & right)
+    allocator<U, heap<U>, TraitsU> const & right)
 {
 	return true;
 }
 
 // Also implement inequality
 template <typename T, typename TraitsT,
-typename U, typename TraitsU>
+    typename U, typename TraitsU>
 bool operator!= (allocator<T, heap<T>, TraitsT> const & left,
-allocator<U, heap<U>, TraitsU> const & right)
+    allocator<U, heap<U>, TraitsU> const & right)
 {
 	return !(left == right);
 }
@@ -232,11 +232,25 @@ template <typename T>
 using nalloc = allocator<T, heap<T>>;
 template <typename K, typename V>
 using umap = std::unordered_map<K, V, std::hash<K>, std::equal_to<K>, std::allocator<std::pair<const K, V>>>;
-typedef std::basic_string<char, std::char_traits<char>, nalloc<char>> shm_string;
+using shm_string = std::basic_string<char, std::char_traits<char>, nalloc<char>>;
 
 // TODO: new w/perfect forwards + delete, or template<typename T> nanocate(...)
 
 } // ns
+
+#include "murmurhash.hpp"
+
+namespace std
+{
+	/** Some compilers */
+ template<> struct hash<nano::shm_string> 
+    {
+        std::size_t operator()(nano::shm_string const& s) const
+        {
+			return (size_t) murmur_hash (s.c_str(), s.size(), 0);
+        }
+    };
+}
 
 // Method for deallocating placement new. However, must call dlfree
 //buf->~YourTypename();

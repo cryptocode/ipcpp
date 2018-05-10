@@ -61,15 +61,30 @@ add_definitions (-DHAVE_MREMAP=0)
 add_definitions (-DUSE_DL_PREFIX=1)
 add_definitions (-DUSE_LOCKS=0)
 
+# Platform bits
+if ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "4")
+  add_definitions (-DNANOCATE_IS_64BIT=0)
+  message (STATUS "32 bit system")
+else ()
+  add_definitions (-DNANOCATE_IS_64BIT=1)
+  message (STATUS "64 bit system")
+endif ()
+
+# Platform files
 if (UNIX)
   set(NANOCATE_PLATFORM src/posix/shmem.cpp)
 else ()
   set(NANOCATE_PLATFORM src/win/shmem.cpp)
 endif (UNIX)
 
+# Posix linking
+if (UNIX AND NOT APPLE)
+  set (LIB_RT rt)
+endif ()
+
 include_directories("${PROJECT_BINARY_DIR}/include")
-add_library(nanocate STATIC ${NANOCATE_PLATFORM} include/dlmalloc.h src/dlmalloc.c src/morecore.cpp include/shalloc.hpp src/shalloc.cpp)
+add_library(nanocate STATIC ${NANOCATE_PLATFORM} include/dlmalloc.h src/dlmalloc.c src/morecore.cpp include/murmurhash.hpp include/shalloc.hpp src/shalloc.cpp)
 
 add_executable(tests test.cpp)
-target_link_libraries(tests nanocate gtest_main)
+target_link_libraries(tests nanocate gtest_main ${LIB_RT})
 

@@ -26,8 +26,8 @@ extern "C" void * shm_morecore (ptrdiff_t diff)
 	{
 		// TODO: multiple, must get an identifer passed to shm_morecore
 		mem = (uint8_t *)nanocate_allocate ("NANOCATE", max);
-		auto mem2 = (uint8_t *)aligned_malloc (max);
-		std::cout << "mem/mem2: " << (void *)mem << "/" << (void *)mem2 << std::endl;
+		//auto mem2 = (uint8_t *)aligned_malloc (max);
+		//std::cout << "mem/mem2: " << (void *)mem << "/" << (void *)mem2 << std::endl;
 	}
 
 	static ptrdiff_t off = 0;
